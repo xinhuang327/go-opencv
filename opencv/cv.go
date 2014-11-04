@@ -33,6 +33,9 @@ const (
 	CV_32S = C.CV_32S
 	CV_32F = C.CV_32F
 	CV_64F = C.CV_64F
+
+	CV_DXT_FORWARD = C.CV_DXT_FORWARD
+	CV_DXT_INVERSE = C.CV_DXT_INVERSE
 )
 
 /* Smoothes array (removes noise) */
@@ -53,8 +56,8 @@ func Smooth(src, dst *IplImage, smoothtype,
 /*
 ConvertScale converts one image to another with optional linear transformation.
 */
-func ConvertScale(a, b *IplImage, scale, shift float64) {
-	C.cvConvertScale(unsafe.Pointer(a), unsafe.Pointer(b), C.double(scale), C.double(shift))
+func ConvertScale(src, dst *IplImage, scale, shift float64) {
+	C.cvConvertScale(unsafe.Pointer(src), unsafe.Pointer(dst), C.double(scale), C.double(shift))
 }
 
 //CVAPI(void)  cvConvertScale( const CvArr* src,
@@ -156,3 +159,17 @@ func And(src1, src2, dst, mask *IplImage) {
 
 // CVAPI(void) cvAnd( const CvArr* src1, const CvArr* src2,
 //                   CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
+
+/* Discrete Cosine Transform */
+func DCT(src, dst *IplImage, flags int) {
+	C.cvDCT(unsafe.Pointer(src), unsafe.Pointer(dst), C.int(flags))
+}
+
+// CVAPI(void)  cvDCT( const CvArr* src, CvArr* dst, int flags );
+
+/* equalizes histogram of 8-bit single-channel image */
+func EqualizeHist(src, dst *IplImage) {
+	C.cvEqualizeHist(unsafe.Pointer(src), unsafe.Pointer(dst))
+}
+
+// CVAPI(void)  cvEqualizeHist( const CvArr* src, CvArr* dst );
