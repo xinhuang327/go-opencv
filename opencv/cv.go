@@ -21,8 +21,10 @@ const (
 	CV_BGR2GRAY  = C.CV_BGR2GRAY
 	CV_BGR2BGRA  = C.CV_BGR2BGRA
 	CV_RGBA2BGRA = C.CV_RGBA2BGRA
+	CV_BGR2HSV   = C.CV_BGR2HSV
 
-	CV_BLUR = C.CV_BLUR
+	CV_BLUR     = C.CV_BLUR
+	CV_GAUSSIAN = C.CV_GAUSSIAN
 
 	CV_8U  = C.CV_8U
 	CV_8S  = C.CV_8S
@@ -96,3 +98,61 @@ func Inpaint(src, inpaint_mask, dst *IplImage, inpaintRange float64, flags int) 
 
 //CVAPI(void) cvInpaint( const CvArr* src, const CvArr* inpaint_mask,
 //                       CvArr* dst, double inpaintRange, int flags );
+
+/* dst(idx) = lower <= src(idx) < upper */
+func InRangeS(src *IplImage, lower Scalar, upper Scalar, dst *IplImage) {
+	C.cvInRangeS(unsafe.Pointer(src), C.CvScalar(lower), C.CvScalar(upper), unsafe.Pointer(dst))
+}
+
+// CVAPI(void) cvInRangeS( const CvArr* src, CvScalar lower,
+//                        CvScalar upper, CvArr* dst );
+
+/* creates structuring element used for morphological operations */
+func CreateStructuringElementEx(
+	cols int, rows int,
+	anchor_x int, anchor_y int,
+	shape int, values []int) *IplConvKernel {
+	return (*IplConvKernel)(C.cvCreateStructuringElementEx(
+		C.int(cols), C.int(rows),
+		C.int(anchor_x), C.int(anchor_y),
+		C.int(shape), (*C.int)(unsafe.Pointer(&values))))
+}
+
+// CVAPI(IplConvKernel*)  cvCreateStructuringElementEx(
+//             int cols, int  rows, int  anchor_x, int  anchor_y,
+//             int shape, int* values CV_DEFAULT(NULL) );
+
+/* releases structuring element */
+func ReleaseStructuringElement(element **IplConvKernel) {
+	C.cvReleaseStructuringElement((**C.IplConvKernel)(unsafe.Pointer(element)))
+}
+
+// CVAPI(void)  cvReleaseStructuringElement( IplConvKernel** element );
+
+/* erodes input image (applies minimum filter) one or more times.
+   If element pointer is NULL, 3x3 rectangular element is used */
+func Erode(src, dst *IplImage, element *IplConvKernel, iterations int) {
+	C.cvErode(unsafe.Pointer(src), unsafe.Pointer(dst), (*C.IplConvKernel)(unsafe.Pointer(element)), C.int(iterations))
+}
+
+// CVAPI(void)  cvErode( const CvArr* src, CvArr* dst,
+//                       IplConvKernel* element CV_DEFAULT(NULL),
+//                       int iterations CV_DEFAULT(1) );
+
+/* dilates input image (applies maximum filter) one or more times.
+   If element pointer is NULL, 3x3 rectangular element is used */
+func Dilate(src, dst *IplImage, element *IplConvKernel, iterations int) {
+	C.cvDilate(unsafe.Pointer(src), unsafe.Pointer(dst), (*C.IplConvKernel)(unsafe.Pointer(element)), C.int(iterations))
+}
+
+// CVAPI(void)  cvDilate( const CvArr* src, CvArr* dst,
+//                        IplConvKernel* element CV_DEFAULT(NULL),
+//                        int iterations CV_DEFAULT(1) );
+
+/* dst(idx) = src1(idx) & src2(idx) */
+func And(src1, src2, dst, mask *IplImage) {
+	C.cvAnd(unsafe.Pointer(src1), unsafe.Pointer(src2), unsafe.Pointer(dst), unsafe.Pointer(mask))
+}
+
+// CVAPI(void) cvAnd( const CvArr* src1, const CvArr* src2,
+//                   CvArr* dst, const CvArr* mask CV_DEFAULT(NULL));
