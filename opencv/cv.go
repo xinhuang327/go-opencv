@@ -173,3 +173,17 @@ func EqualizeHist(src, dst *IplImage) {
 }
 
 // CVAPI(void)  cvEqualizeHist( const CvArr* src, CvArr* dst );
+/* Fills the connected component until the color difference gets large enough */
+func FloodFill(image *IplImage, seed_point Point, new_val Scalar,
+	low_diff Scalar, up_diff Scalar, comp *ConnectedComp, flags int, mask *IplImage) {
+	C.cvFloodFill(unsafe.Pointer(image), C.cvPoint(C.int(seed_point.X), C.int(seed_point.Y)), C.CvScalar(new_val),
+		C.CvScalar(low_diff), C.CvScalar(up_diff), (*C.CvConnectedComp)(unsafe.Pointer(comp)),
+		C.int(flags), unsafe.Pointer(mask))
+}
+
+// CVAPI(void)  cvFloodFill( CvArr* image, CvPoint seed_point,
+//                           CvScalar new_val, CvScalar lo_diff CV_DEFAULT(cvScalarAll(0)),
+//                           CvScalar up_diff CV_DEFAULT(cvScalarAll(0)),
+//                           CvConnectedComp* comp CV_DEFAULT(NULL),
+//                           int flags CV_DEFAULT(4),
+//                           CvArr* mask CV_DEFAULT(NULL));

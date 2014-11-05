@@ -693,6 +693,35 @@ const (
 
 type AttrList C.CvAttrList
 
+/* Connected component structure */
+type ConnectedComp C.CvConnectedComp
+
+func (comp *ConnectedComp) Area() float64 {
+	return float64(comp.area)
+}
+
+func (comp *ConnectedComp) Value() Scalar {
+	return Scalar(comp.value)
+}
+
+func (comp *ConnectedComp) Rect() Rect {
+	return Rect(comp.rect)
+}
+
+func (comp *ConnectedComp) Contour() *Seq {
+	return (*Seq)(comp.contour)
+}
+
+//typedef struct CvConnectedComp
+//{
+//    double area;    /* area of the connected component  */
+//    CvScalar value; /* average color of the connected component */
+//    CvRect rect;    /* ROI of the component  */
+//    CvSeq* contour; /* optional component boundary
+//                      (the contour might have child contours corresponding to the holes)*/
+//}
+//CvConnectedComp;
+
 /*****************************************************************************\
 *                                 --- END ---                                 *
 \*****************************************************************************/

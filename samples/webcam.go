@@ -6,8 +6,8 @@ import (
 	//"path"
 	//"runtime"
 
-	"github.com/lazywei/go-opencv/opencv"
-	//"../opencv" // can be used in forks, comment in real application
+	"../opencv" // can be used in forks, comment in real application
+	// "github.com/lazywei/go-opencv/opencv"
 )
 
 func main() {
