@@ -52,7 +52,7 @@ func FromImageUnsafe(img *image.RGBA) *IplImage {
 
 	buf.SetData(unsafe.Pointer(&img.Pix[0]), CV_AUTOSTEP)
 	CvtColor(buf, dst, CV_RGBA2BGRA)
-	buf.Release()
+	// buf.Release()
 
 	return dst
 }
