@@ -7,6 +7,7 @@ package opencv
 //#include "opencv.h"
 //#cgo linux  pkg-config: opencv
 //#cgo darwin pkg-config: opencv
+//#cgo freebsd pkg-config: opencv
 //#cgo windows LDFLAGS: -lopencv_core242.dll -lopencv_imgproc242.dll -lopencv_photo242.dll -lopencv_highgui242.dll -lstdc++
 import "C"
 import (
@@ -82,6 +83,17 @@ func Canny(image, edges *IplImage, threshold1, threshold2 float64, aperture_size
 
 //CVAPI(void)  cvCanny( const CvArr* image, CvArr* edges, double threshold1,
 //                      double threshold2, int  aperture_size CV_DEFAULT(3) );
+
+/* Calculates the first, second, third, or mixed image derivatives using an
+* extended Sobel operator.  */
+func Sobel(src, dst *IplImage, xorder, yorder, aperture_size int) {
+	C.cvSobel(unsafe.Pointer(src), unsafe.Pointer(dst),
+		C.int(xorder), C.int(yorder),
+		C.int(aperture_size),
+	)
+}
+
+// C: void cvSobel(const CvArr* src, CvArr* dst, int xorder, int yorder, int aperture_size=3 )
 
 const (
 	CV_INPAINT_NS    = C.CV_INPAINT_NS
